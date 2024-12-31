@@ -1,20 +1,26 @@
 #pragma once
 #include "WindowManager.hpp"
+#include "AssetManager.hpp"
+
+class WindowManager;
+class AssetManager;	
 
 class Game {
+	friend class WindowManager;
 public:
-	Game();
+	Game() = delete;
 
-	bool init();
+	static bool init();
 
-	void processEvents();
-	void update();
-	void render();
-	void clean();
+	static void processEvents();
+	static void update();
+	static void render();
+	static void clean();
 
-	bool isRunning() const { return m_isRunning; }
+	static bool isRunning() { return m_isRunning; }
 
 private:
-	bool m_isRunning;
-	std::unique_ptr<WindowManager> m_windowManager;
+	static bool m_isRunning;
+	static std::unique_ptr<WindowManager> m_windowManager;
+	static std::unique_ptr<AssetManager> m_assetManager;
 };

@@ -4,18 +4,16 @@
 
 int main(int argc, char *argv[])
 {
-	Game game = Game();
-
-	if (game.init())
+	if (Game::init())
 	{
-		while (game.isRunning())
+		while (Game::isRunning())
 		{
-			game.processEvents();
-			game.update();
-			game.render();
+			Game::update();
+			Game::render();
+			Game::processEvents();
 		}
 
-		game.clean();
+		Game::clean();
 		return 0;
 	}
 

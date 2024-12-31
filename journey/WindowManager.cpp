@@ -1,8 +1,11 @@
 #include "WindowManager.hpp"
 
-WindowManager::WindowManager() : 
-	m_window(nullptr,SDL_DestroyWindow), 
-	m_renderer(nullptr,SDL_DestroyRenderer)
+std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> WindowManager::m_window(nullptr, SDL_DestroyWindow);
+std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)> WindowManager::m_renderer(nullptr, SDL_DestroyRenderer);
+
+SDL_Rect destRect = SDL_Rect();
+
+WindowManager::WindowManager()
 {}
 
 bool WindowManager::init()
@@ -40,14 +43,34 @@ bool WindowManager::init()
 		Logger::success("WindowManager::init::SDL_CreateRenderer> SDL renderer succesfully created");
 	}
 
+
+	// init player texture
+
+
 	return true;
+}
+
+void WindowManager::update()
+{
+	destRect.h = TILE_SIZE * TILE_SCALE;
+	destRect.w = TILE_SIZE * TILE_SCALE;
 }
 
 void WindowManager::render()
 {
-	SDL_SetRenderDrawColor(m_renderer.get(), 0, 255, 0, 255);
+	SDL_SetRenderDrawColor(m_renderer.get(), 255, 255, 255, 255);
 	SDL_RenderClear(m_renderer.get());
 	// Elements to be rendered
+	// Depth of rendering is backgroud items first and foreground items last
+	Entity* playerTexture = Game::m_assetManager->getEntity("Player");
+	if (playerTexture)
+	{
+		SDL_RenderCopy(m_renderer.get(),
+			playerTexture->getTexture(),
+			NULL,
+			&destRect);
+	}
 
+	
 	SDL_RenderPresent(m_renderer.get());
 }
