@@ -14,7 +14,8 @@ bool WindowManager::init()
 					WINDOW_STARTING_POS,
 					WINDOW_WIDTH,
 					WINDOW_HEIGHT,
-					WINDOW_FLAGS));
+					WINDOW_FLAGS 
+					| (WINDOW_IS_FULLSCREEN ? SDL_WINDOW_FULLSCREEN : 0)));
 	if (!m_window)
 	{
 		Logger::error("WindowManager::init::SDL_CreateWindow> SDL window creation failed, returning...");
